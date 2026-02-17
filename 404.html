@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8">
 </head>
 <body>
 <script>
-  const path = window.location.pathname;
-  const parts = path.split("/");
+  // Exemple: /access/001  ou /friend/12
+  const parts = window.location.pathname.split("/").filter(Boolean); // ["access","001"]
 
-  if (parts.length >= 3) {
-    const group = parts[1];
-    const id = parts[2];
+  const group = parts[0];
+  const id = parts[1];
 
-    if (group === "access" || group === "friend") {
-      window.location.replace(`/${group}/index.html#${id}`);
-    }
-  }
-
-  // fallback
-  window.location.replace("/");
+  if ((group === "access" || group === "friend") && id) {
+    // Redirige vers le bon index (access OU friend) + paramètre id
+    window.location.replace(`/${group}/?id=${encodeURIComponent(id)}`);
+  } else {
+    // fallback
+    window.location.replace(`/`);
+  }
 </script>
 </body>
 </html>
