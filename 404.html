@@ -1,5 +1,24 @@
-CNAME
-index.html
-404.html
-access/
-   index.html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<script>
+  const path = window.location.pathname;
+  const parts = path.split("/");
+
+  if (parts.length >= 3) {
+    const group = parts[1];
+    const id = parts[2];
+
+    if (group === "access" || group === "friend") {
+      window.location.replace(`/${group}/index.html#${id}`);
+    }
+  }
+
+  // fallback
+  window.location.replace("/");
+</script>
+</body>
+</html>
