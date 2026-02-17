@@ -18,8 +18,9 @@
     const allowedIds = [001,002,003,004,005];
 
     // Récupère le numéro dans l’URL
-    const parts = window.location.pathname.split("/");
-    const id = parseInt(parts[parts.length - 1], 10);
+const params = new URLSearchParams(window.location.search);
+const raw = params.get("id");
+const id = parseInt(raw, 10);
 
     // Vérifie si le code est autorisé
     if (allowedIds.includes(id)) {
