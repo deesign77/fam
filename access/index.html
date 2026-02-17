@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Redirection</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0R1RLT786"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J0R1RLT786');
+  </script>
+
+  <script>
+    // Liste des codes autorisés
+    const allowedIds = [1,2,3,4,5,6,7,8,9,10];
+
+    // Récupère le numéro dans l’URL
+    const parts = window.location.pathname.split("/");
+    const id = parseInt(parts[parts.length - 1], 10);
+
+    // Vérifie si le code est autorisé
+    if (allowedIds.includes(id)) {
+
+      // (optionnel) envoie un event avec le code
+      gtag('event', 'access_visit', {
+        code: 'access-' + id
+      });
+
+      // Redirection vers ton lien Bridge
+      setTimeout(function () {
+        window.location.href = "https://share.bridge.audio/sante-music/sante-access?id=7b61bbed-409a-4ff5-950e-dbcf36cee0d9";
+      }, 800);
+
+    } else {
+      document.body.innerHTML = "Access not available";
+    }
+  </script>
+</head>
+<body>
+  Redirection…
+</body>
+</html>
