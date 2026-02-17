@@ -18,8 +18,16 @@
     const allowedIds = [1,2,3,4,5];
 
     // Récupère le numéro dans l’URL
-const params = new URLSearchParams(window.location.search);
-const raw = params.get("id");
+function getRawId() {
+  const params = new URLSearchParams(window.location.search);
+  const q = params.get("id");
+  if (q) return q; // cas /access/?id=001
+
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  return parts[parts.length - 1]; // cas /access/001
+}
+
+const raw = getRawId();
 const id = parseInt(raw, 10);
 
     // Vérifie si le code est autorisé
