@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Redirection</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0R1RLT786"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J0R1RLT786');
+  </script>
+
+  <script>
+    // Liste des codes friend autorisés
+    const allowedIds = [001,002,003,004,005];
+
+    // Récupère le numéro dans l’URL
+    const parts = window.location.pathname.split("/");
+    const id = parseInt(parts[parts.length - 1], 10);
+
+    // Vérifie si le code est autorisé
+    if (allowedIds.includes(id)) {
+
+      // Event Google Analytics
+      gtag('event', 'friend_visit', {
+        code: 'friend-' + id
+      });
+
+      // Redirection vers le lien Bridge des amis
+      setTimeout(function () {
+        window.location.href = "https://share.bridge.audio/sante-music/sante?id=17e3089c-43ad-4882-bc4d-6f7010f4ae78";
+      }, 800);
+
+    } else {
+      document.body.innerHTML = "Access not available";
+    }
+  </script>
+</head>
+<body>
+  Redirection…
+</body>
+</html>
