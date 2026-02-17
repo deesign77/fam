@@ -1,22 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-<meta charset="utf-8">
+  <meta charset="utf-8">
+  <title>Redirection</title>
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J0R1RLT786"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-J0R1RLT786');
-</script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0R1RLT786"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J0R1RLT786');
+  </script>
 
-<meta http-equiv="refresh" content="0; url=https://share.bridge.audio/sante-music/sante?id=17c3089c-43ad-4882-bc4d-6f7010f4ae78">
-<title>Redirection</title>
-
+  <script>
+    // Redirection après un court délai pour laisser GA envoyer la visite
+    setTimeout(function () {
+      window.location.href = "https://share.bridge.audio/sante-music/sante?id=17c3089c-43ad-4882-bc4d-6f7010f4ae78";
+    }, 800);
+  </script>
 </head>
+
 <body>
-Redirection…
+  Redirection…
 </body>
 </html>
