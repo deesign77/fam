@@ -18,42 +18,39 @@
 Redirection...
 
 <script>
-  // Liste autorisée
-  const allowedIds = ["001","002","003","004","005","006","007","008","009","010","011","012","013","014","015","016","017","018","019","020"];
+// Liste autorisée
+const allowedIds = ["001","002","003","004","005","006","007","008","009","010"];
 
-  function getRawId() {
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get("id");
-    if (q) return q;
+function getRawId() {
+  const params = new URLSearchParams(window.location.search);
+  const q = params.get("id");
+  if (q) return q;
 
-    const parts = window.location.pathname.split("/").filter(Boolean);
-    return parts[parts.length - 1];
-  }
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  return parts[parts.length - 1];
+}
 
-  // Normalisation
-  const raw = (getRawId() || "").trim();
-  const num = parseInt(raw, 10);
-  const id3 = Number.isFinite(num) ? String(num).padStart(3, "0") : raw;
+// Normalisation
+const raw = (getRawId() || "").trim();
+const num = parseInt(raw, 10);
+const id3 = Number.isFinite(num) ? String(num).padStart(3, "0") : raw;
 
-  if (allowedIds.includes(id3)) {
+if (allowedIds.includes(id3)) {
 
-    // Event Google Analytics
-    try {
-      gtag('event', 'nfc_scan', {
-        group: 'friend',
-        code: id3
-      });
-    } catch (e) {}
+  // Event Google Analytics
+  try {
+    gtag('event', 'nfc_scan', {
+      group: 'access',
+      code: id3
+    });
+  } catch (e) {}
 
-    // Redirection vers ton lien Bridge
-    setTimeout(() => {
-      window.location.href = "https://share.bridge.audio/sante-music/sante?id=17e3089c-43ad-4882-bc4d-6f7010f4ae78";
-    }, 800);
+  // Redirection vers ton lien Bridge
+  setTimeout(() => {
+    window.location.href = "https://share.bridge.audio/sante-music/sante-access?id=7b61bbed-409a-4ff5-950e-dbcf36cee0d9";
+  }, 800);
 
-  } else {
-    document.body.innerHTML = "Friend: Access not available";
-  }
+} else {
+  document.body.innerHTML = "Access not available";
+}
 </script>
-
-</body>
-</html>
