@@ -28,7 +28,7 @@ function getRawId() {
 }
 
 const raw = getRawId();
-const id = raw;
+const id = parseInt(raw, 10);
 
 if (allowedIds.includes(id)) {
 
