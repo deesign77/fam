@@ -88,14 +88,28 @@ const qs = new URLSearchParams({
   path: window.location.pathname + window.location.search
 });
 
-    // sendBeacon si possible (avant redirection)
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(url + "?" + qs.toString());
-    } else {
-      fetch(url + "?" + qs.toString(), { mode: "no-cors" });
-    }
-  } catch (e) {}
+    // IP Location for Cloudflare
+  try {
+  const worker = "https://nfc-tracker.santesqua.workers.dev/log";
+  const token = "nbkbkF19_2026";
 
+  const qs = new URLSearchParams({
+    token,
+    group: "access",
+    code: id3,
+    path: window.location.pathname + window.location.search,
+    ref: document.referrer || "",
+    ua: navigator.userAgent || "",
+    lang: navigator.language || ""
+  });
+
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(worker + "?" + qs.toString());
+  } else {
+    fetch(worker + "?" + qs.toString(), { mode: "no-cors", keepalive: true });
+  }
+} catch (e) {}
+  
   // Redirection vers ton lien Bridge
   setTimeout(() => {
     window.location.href = "https://share.bridge.audio/sante-music/sante-access?id=7b61bbed-409a-4ff5-950e-dbcf36cee0d9";
