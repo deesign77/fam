@@ -18,6 +18,28 @@
 Redirection...
 
 <script>
+
+  // Geo cache (pays/ville) - se met à jour en arrière-plan
+(function warmGeoCache(){
+  try {
+    const key = "geo_cache_v1";
+    const cached = JSON.parse(localStorage.getItem(key) || "null");
+    const fresh = cached && cached.ts && (Date.now() - cached.ts < 24*60*60*1000);
+    if (fresh) return;
+
+    fetch("https://ipapi.co/json/")
+      .then(r => r.json())
+      .then(j => {
+        localStorage.setItem(key, JSON.stringify({
+          ts: Date.now(),
+          country: j.country_name || j.country || "",
+          city: j.city || ""
+        }));
+      })
+      .catch(()=>{});
+  } catch(e){}
+})();
+  
 // Liste autorisée
 const allowedIds = ["001","002","003","004","005","006","007","008","009","010","011","012","013","014","015","016","017","018","019","020"];
 
@@ -50,14 +72,20 @@ if (allowedIds.includes(id3)) {
     const url = "https://script.google.com/macros/s/AKfycbzc85ctpRBvnKByLa6-KOKOaV2rW-SY7V8zQDRbmHKCUzqwi-ai_u2QiD5-aQwyiVBz6w/exec";
     const token = "nbkbkF19_2026";
 
-    cconst qs = new URLSearchParams({
+    let country = "", city = "";
+try {
+  const g = JSON.parse(localStorage.getItem("geo_cache_v1") || "null");
+  country = (g && g.country) ? g.country : "";
+  city = (g && g.city) ? g.city : "";
+} catch(e) {}
+
+const qs = new URLSearchParams({
   token,
   group: "friend",
   code: id3,
-  path: window.location.pathname + window.location.search,
-  ref: document.referrer || "",
-  ua: navigator.userAgent || "",
-  lang: navigator.language || ""
+  country,
+  city,
+  path: window.location.pathname + window.location.search
 });
 
     // sendBeacon si possible (avant redirection)
