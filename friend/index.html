@@ -28,15 +28,14 @@ function getRawId() {
 }
 
 const raw = getRawId();
-const id = parseInt(raw, 10);
+const id = raw;
 
-    // Vérifie si le code est autorisé
-    if (allowedIds.includes(id)) {
+if (allowedIds.includes(id)) {
 
-      // Event Google Analytics
-      gtag('event', 'friend_visit', {
-        code: 'friend-' + id
-      });
+  gtag('event', 'nfc_scan', {
+    group: 'friend',
+    code: id
+  });
 
       // Redirection vers le lien Bridge des amis
       setTimeout(function () {
