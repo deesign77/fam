@@ -28,15 +28,14 @@
 }
 
 const raw = getRawId();
-const id = parseInt(raw, 10);
+const id = raw;
 
-    // Vérifie si le code est autorisé
-    if (allowedIds.includes(id)) {
+if (allowedIds.includes(id)) {
 
-      // (optionnel) envoie un event avec le code
-      gtag('event', 'access_visit', {
-        code: 'access-' + id
-      });
+  gtag('event', 'nfc_scan', {
+    group: 'access',
+    code: id
+  });
 
       // Redirection vers ton lien Bridge
       setTimeout(function () {
