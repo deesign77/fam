@@ -50,15 +50,15 @@ if (allowedIds.includes(id3)) {
     const url = "https://script.google.com/macros/s/AKfycbzc85ctpRBvnKByLa6-KOKOaV2rW-SY7V8zQDRbmHKCUzqwi-ai_u2QiD5-aQwyiVBz6w/exec";
     const token = "nbkbkF19_2026";
 
-    const qs = new URLSearchParams({
-      token,
-      group: "friend",
-      code: id3,
-      path: window.location.pathname + window.location.search,
-      ref: document.referrer || "",
-      ua: navigator.userAgent || "",
-      lang: navigator.language || ""
-    });
+    cconst qs = new URLSearchParams({
+  token,
+  group: "friend",
+  code: id3,
+  path: window.location.pathname + window.location.search,
+  ref: document.referrer || "",
+  ua: navigator.userAgent || "",
+  lang: navigator.language || ""
+});
 
     // sendBeacon si possible (avant redirection)
     if (navigator.sendBeacon) {
