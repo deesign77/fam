@@ -79,15 +79,6 @@ try {
   city = (g && g.city) ? g.city : "";
 } catch(e) {}
 
-const qs = new URLSearchParams({
-  token,
-  group: "access",
-  code: id3,
-  country,
-  city,
-  path: window.location.pathname + window.location.search
-});
-
     // IP Location for Cloudflare
   try {
   const worker = "https://nfc-tracker.santesqua.workers.dev/log";
