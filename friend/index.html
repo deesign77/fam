@@ -1,53 +1,38 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <title>Redirection</title>
+<script>
+  // ✅ Liste autorisée en format "001", "002", ...
+  const allowedIds = ["001","002","003","004","005","006","007","008","009","010"];
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0R1RLT786"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-J0R1RLT786');
-  </script>
+  function getRawId() {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("id");
+    if (q) return q; // cas /access/?id=001
 
-  <script>
-    // Liste des codes friend autorisés
-    const allowedIds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    return parts[parts.length - 1]; // cas /access/001 (si jamais)
+  }
 
-    // Récupère le numéro dans l’URL
-function getRawId() {
-  const params = new URLSearchParams(window.location.search);
-  const q = params.get("id");
-  if (q) return q; // cas /access/?id=001
+  // ✅ Normalisation : "1" -> "001", "001" -> "001"
+  const raw = (getRawId() || "").trim();
+  const num = parseInt(raw, 10);
+  const id3 = Number.isFinite(num) ? String(num).padStart(3, "0") : raw;
 
-  const parts = window.location.pathname.split("/").filter(Boolean);
-  return parts[parts.length - 1]; // cas /access/001
-}
+  // ✅ Debug visuel (pour être sûr de ce que GA et ton code voient)
+  console.log("raw=", raw, "num=", num, "id3=", id3);
 
-const raw = getRawId();
-const id = raw;
+  if (allowedIds.includes(id3)) {
 
-if (allowedIds.includes(id)) {
+    // Event GA
+    gtag('event', 'nfc_scan', {
+      group: 'access',
+      code: id3
+    });
 
-  gtag('event', 'nfc_scan', {
-    group: 'friend',
-    code: id
-  });
+    // Redirect
+    setTimeout(() => {
+      window.location.href = "TON_LIEN_BRIDGE_AUDIO";
+    }, 800);
 
-      // Redirection vers le lien Bridge des amis
-      setTimeout(function () {
-        window.location.href = "https://share.bridge.audio/sante-music/sante?id=17e3089c-43ad-4882-bc4d-6f7010f4ae78";
-      }, 800);
-
-    } else {
-      document.body.innerHTML = "Access not available";
-    }
-  </script>
-</head>
-<body>
-  Redirection…
-</body>
-</html>
+  } else {
+    document.body.innerHTML = "Access not available (id=" + raw + " → " + id3 + ")";
+  }
+</script>
