@@ -37,13 +37,36 @@ const id3 = Number.isFinite(num) ? String(num).padStart(3, "0") : raw;
 
 if (allowedIds.includes(id3)) {
 
-  // Event Google Analytics
-  try {
-    gtag('event', 'nfc_scan', {
-      group: 'access',
-      code: id3
-    });
-  } catch (e) {}
+  // Event Google Analytics
+  try {
+    gtag('event', 'nfc_scan', {
+      group: 'access',
+      code: id3
+    });
+  } catch (e) {}
+
+  // Log vers Google Sheet (non bloquant)
+  try {
+    const url = "https://script.google.com/macros/s/AKfycbzc85ctpRBvnKByLa6-KOKOaV2rW-SY7V8zQDRbmHKCUzqwi-ai_u2QiD5-aQwyiVBz6w/exec";
+    const token = "nbkbkF19_2026";
+
+    const qs = new URLSearchParams({
+      token,
+      group: "access",
+      code: id3,
+      path: window.location.pathname + window.location.search,
+      ref: document.referrer || "",
+      ua: navigator.userAgent || "",
+      lang: navigator.language || ""
+    });
+
+    // sendBeacon si possible (avant redirection)
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(url + "?" + qs.toString());
+    } else {
+      fetch(url + "?" + qs.toString(), { mode: "no-cors" });
+    }
+  } catch (e) {}
 
   // Redirection vers ton lien Bridge
   setTimeout(() => {
