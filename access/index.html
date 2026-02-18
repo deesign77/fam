@@ -72,13 +72,6 @@ if (allowedIds.includes(id3)) {
     const url = "https://script.google.com/macros/s/AKfycbzc85ctpRBvnKByLa6-KOKOaV2rW-SY7V8zQDRbmHKCUzqwi-ai_u2QiD5-aQwyiVBz6w/exec";
     const token = "nbkbkF19_2026";
 
-    let country = "", city = "";
-try {
-  const g = JSON.parse(localStorage.getItem("geo_cache_v1") || "null");
-  country = (g && g.country) ? g.country : "";
-  city = (g && g.city) ? g.city : "";
-} catch(e) {}
-
     // IP Location for Cloudflare
   try {
   const worker = "https://nfc-tracker.santesqua.workers.dev/log";
