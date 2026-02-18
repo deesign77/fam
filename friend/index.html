@@ -1,38 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Friend Redirect</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0RLRLT786"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J0RLRLT786');
+  </script>
+</head>
+
+<body>
+Redirection...
+
 <script>
-  // ✅ Liste autorisée en format "001", "002", ...
-  const allowedIds = ["1","2","003","004","005","006","007","008","009","010"];
+  // Liste autorisée
+  const allowedIds = ["001","002","003","004","005","006","007","008","009","010"];
 
   function getRawId() {
     const params = new URLSearchParams(window.location.search);
     const q = params.get("id");
-    if (q) return q; // cas /access/?id=001
+    if (q) return q;
 
     const parts = window.location.pathname.split("/").filter(Boolean);
-    return parts[parts.length - 1]; // cas /access/001 (si jamais)
+    return parts[parts.length - 1];
   }
 
-  // ✅ Normalisation : "1" -> "001", "001" -> "001"
+  // Normalisation
   const raw = (getRawId() || "").trim();
   const num = parseInt(raw, 10);
   const id3 = Number.isFinite(num) ? String(num).padStart(3, "0") : raw;
 
-  // ✅ Debug visuel (pour être sûr de ce que GA et ton code voient)
-  console.log("raw=", raw, "num=", num, "id3=", id3);
-
   if (allowedIds.includes(id3)) {
 
-    // Event GA
-    gtag('event', 'nfc_scan', {
-      group: 'access',
-      code: id3
-    });
+    // Event Google Analytics
+    try {
+      gtag('event', 'nfc_scan', {
+        group: 'friend',
+        code: id3
+      });
+    } catch (e) {}
 
-    // Redirect
+    // Redirection vers ton lien Bridge
     setTimeout(() => {
-      window.location.href = "TON_LIEN_BRIDGE_AUDIO";
+      window.location.href = "https://share.bridge.audio/sante-music/sante?id=17e3089c-43ad-4882-bc4d-6f7010f4ae78";
     }, 800);
 
   } else {
-    document.body.innerHTML = "Access not available (id=" + raw + " → " + id3 + ")";
+    document.body.innerHTML = "Friend: Access not available";
   }
 </script>
+
+</body>
+</html>
