@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>Friend Redirect</title>
+  <title>Access Redirect</title>
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0RLRLT786"></script>
@@ -18,88 +18,63 @@
 Redirection...
 
 <script>
+  // ===== CONFIG =====
+  const GROUP = "access";
+  const WORKER_URL = "https://nfc-tracker.santesqua.workers.dev/log";
+  const SECRET = "nbkbkF19_2026";
+  const DEST_URL = "https://share.bridge.audio/sante-music/sante-access?id=7b61bbed-409a-4ff5-950e-dbcf36cee0d9";
 
-  // Geo cache (pays/ville) - se met à jour en arrière-plan
-(function warmGeoCache(){
-  try {
-    const key = "geo_cache_v1";
-    const cached = JSON.parse(localStorage.getItem(key) || "null");
-    const fresh = cached && cached.ts && (Date.now() - cached.ts < 24*60*60*1000);
-    if (fresh) return;
+  const allowedIds = ["001","002","003","004","005","006","007","008","009","010","011","012","013","014","015","016","017","018","019","020"];
 
-    fetch("https://ipapi.co/json/")
-      .then(r => r.json())
-      .then(j => {
-        localStorage.setItem(key, JSON.stringify({
-          ts: Date.now(),
-          country: j.country_name || j.country || "",
-          city: j.city || ""
-        }));
-      })
-      .catch(()=>{});
-  } catch(e){}
-})();
-  
-// Liste autorisée
-const allowedIds = ["001","002","003","004","005","006","007","008","009","010","011","012","013","014","015","016","017","018","019","020"];
+  function getRawId() {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("id");
+    if (q) return q;
 
-function getRawId() {
-  const params = new URLSearchParams(window.location.search);
-  const q = params.get("id");
-  if (q) return q;
-
-  const parts = window.location.pathname.split("/").filter(Boolean);
-  return parts[parts.length - 1];
-}
-
-// Normalisation
-const raw = (getRawId() || "").trim();
-const num = parseInt(raw, 10);
-const id3 = Number.isFinite(num) ? String(num).padStart(3, "0") : raw;
-
-if (allowedIds.includes(id3)) {
-
-  // Event Google Analytics
-  try {
-    gtag('event', 'nfc_scan', {
-      group: 'access',
-      code: id3
-    });
-  } catch (e) {}
-
-  // Log vers Google Sheet (non bloquant)
-  try {
-    const url = "https://script.google.com/macros/s/AKfycbzc85ctpRBvnKByLa6-KOKOaV2rW-SY7V8zQDRbmHKCUzqwi-ai_u2QiD5-aQwyiVBz6w/exec";
-    const token = "nbkbkF19_2026";
-
-    // IP Location for Cloudflare
-  try {
-  const worker = "https://nfc-tracker.santesqua.workers.dev/log";
-  const token = "nbkbkF19_2026";
-
-  const qs = new URLSearchParams({
-    token,
-    group: "access",
-    code: id3,
-    path: window.location.pathname + window.location.search,
-    ref: document.referrer || "",
-    ua: navigator.userAgent || "",
-    lang: navigator.language || ""
-  });
-
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon(worker + "?" + qs.toString());
-  } else {
-    fetch(worker + "?" + qs.toString(), { mode: "no-cors", keepalive: true });
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    return parts[parts.length - 1];
   }
-} catch (e) {}
-  
-  // Redirection vers ton lien Bridge
-  setTimeout(() => {
-    window.location.href = "https://share.bridge.audio/sante-music/sante-access?id=7b61bbed-409a-4ff5-950e-dbcf36cee0d9";
-  }, 800);
 
-} else {
-  document.body.innerHTML = "Access not available";
-}
+  const raw = (getRawId() || "").trim();
+  const num = parseInt(raw, 10);
+  const id3 = Number.isFinite(num) ? String(num).padStart(3, "0") : raw;
+
+  if (!allowedIds.includes(id3)) {
+    document.body.innerHTML = "Access not available";
+  } else {
+
+    // 1) Google Analytics event (non bloquant)
+    try {
+      gtag("event", "nfc_scan", { group: GROUP, code: id3 });
+    } catch(e) {}
+
+    // 2) Log vers Cloudflare Worker (ville + pays dès le 1er scan)
+    try {
+      const qs = new URLSearchParams({
+        token: SECRET,
+        group: GROUP,
+        code: id3,
+        path: window.location.pathname + window.location.search,
+        ref: document.referrer || "",
+        ua: navigator.userAgent || "",
+        lang: navigator.language || ""
+      });
+
+      const url = WORKER_URL + "?" + qs.toString();
+
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(url);
+      } else {
+        fetch(url, { mode: "no-cors", keepalive: true });
+      }
+    } catch(e) {}
+
+    // 3) Redirection fluide
+    setTimeout(() => {
+      window.location.replace(DEST_URL);
+    }, 150);
+  }
 </script>
+
+</body>
+</html>
