@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<script>
+  // Exemple: /access/001  ou /friend/12
+  const parts = window.location.pathname.split("/").filter(Boolean); // ["access","001"]
+
+  const group = parts[0];
+  const id = parts[1];
+
+  if ((group === "access" || group === "friend") && id) {
+    // Redirige vers le bon index (access OU friend) + paramètre id
+    window.location.replace(`/${group}/?id=${encodeURIComponent(id)}`);
+  } else {
+    // fallback
+    window.location.replace(`/`);
+  }
+</script>
+</body>
+</html>
