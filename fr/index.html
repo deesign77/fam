@@ -57,7 +57,7 @@ Redirection...
         token: SECRET,
         group: GROUP,
         code: id3,
-        path: "/friend/" + id3 + window.location.search,
+        path: window.location.pathname + window.location.search,
         ref: document.referrer || "",
         ua: navigator.userAgent || "",
         lang: navigator.language || ""
