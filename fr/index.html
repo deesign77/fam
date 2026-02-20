@@ -51,29 +51,31 @@ Redirection...
       gtag("event", "nfc_scan", { group: GROUP, code: id3 });
     } catch(e) {}
 
-   // 2) Log vers Cloudflare Worker (ville + pays dès le 1er scan)
-try {
-  const qs = new URLSearchParams({
-    token: SECRET,
-    group: GROUP,
-    code: id3,
-    path: window.location.pathname + window.location.search,
-    ref: document.referrer || "",
-    ua: navigator.userAgent || "",
-    lang: navigator.language || ""
-  });
+    // 2) Log vers Cloudflare Worker (ville + pays dès le 1er scan)
+    try {
+      const qs = new URLSearchParams({
+        token: SECRET,
+        group: GROUP,
+        code: id3,
+        path: window.location.pathname + window.location.search,
+        ref: document.referrer || "",
+        ua: navigator.userAgent || "",
+        lang: navigator.language || ""
+      });
 
-  const url = WORKER_URL + "?" + qs.toString();
+      const url = WORKER_URL + "?" + qs.toString();
 
-  fetch(url, { mode: "no-cors", keepalive: true })
-    .catch(() => {})
-    .finally(() => {
-      window.location.replace(DEST_URL);
-    });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(url);
+      } else {
+        fetch(url, { mode: "no-cors", keepalive: true });
+      }
+    } catch(e) {}
 
-} catch(e) {
-  window.location.replace(DEST_URL);
-}
+    // 3) Redirection fluide
+    setTimeout(() => {
+      window.location.replace(DEST_URL);
+    }, 150);
   }
 </script>
 
