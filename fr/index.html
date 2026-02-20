@@ -43,7 +43,7 @@ Redirection...
   const id3 = Number.isFinite(num) ? String(num).padStart(3, "0") : raw;
 
   if (!allowedIds.includes(id3)) {
-    document.body.innerHTML = "Friend not available";
+    document.body.innerHTML = "Not available";
   } else {
 
     // 1) Google Analytics event (non bloquant)
