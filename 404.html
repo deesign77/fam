@@ -11,7 +11,7 @@
   const group = parts[0];
   const id = parts[1];
 
-  if ((group === "access" || group === "friend") && id) {
+  if ((group === "ac" || group === "friend") && id) {
     // Redirige vers le bon index (access OU friend) + paramètre id
     window.location.replace(`/${group}/?id=${encodeURIComponent(id)}`);
   } else {
