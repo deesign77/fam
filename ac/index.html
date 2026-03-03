@@ -23,6 +23,10 @@ Redirection...
   const WORKER_URL = "https://nfc-tracker.santesqua.workers.dev/log";
   const SECRET = "nbkbkF19_2026";
   const DEST_URL = "https://share.bridge.audio/sante-music/sante-access?id=7b61bbed-409a-4ff5-950e-dbcf36cee0d9";
+  // ✅ Exception : ce code va vers une autre destination
+const EXCEPTIONS = {
+  "XE06RZIZ": "https://share.bridge.audio/sante-music/sante-morceauxprod?id=f334be15-eb20-4dc3-8dac-6b7227e3c23d"
+};
 
   const allowedIds = ["CNGRYM3L","BJF0HV9N","CUK25GXQ","GL49VNKY","G4P4SK7O","SL6QESAF","IQ9ZC8DZ","FQ70ZTMR","UV9Z7JCA"
                       ,"VWJRL4O9","FK1OGW37","HO3F8BIU","MJVD2COC","9UFVP8CR","7BNI8795","3A2QJX7W","QY4AYCIA","Y2L015Y7","GJ4NWEHI"];
@@ -71,7 +75,8 @@ Redirection...
 
     // 3) Redirection fluide
     setTimeout(() => {
-      window.location.replace(DEST_URL);
+      const finalUrl = EXCEPTIONS[id3] || DEST_URL;
+window.location.replace(finalUrl);
     }, 150);
   }
 </script>
